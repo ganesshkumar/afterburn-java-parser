@@ -7,7 +7,7 @@ public class Headers {
     private String method;
     private Map<String, String> value = new HashMap<>();
 
-    Headers(String rawString) {
+    public Headers(String rawString) {
         String[] parts = rawString.split("\n");
         method = parts[0].split(" ")[0];
         for (int i = 1; i < parts.length; i++) {
