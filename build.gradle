@@ -1,12 +1,12 @@
 plugins {
     id 'net.saliman.cobertura' version '2.5.2'
+    id 'com.jfrog.bintray' version '1.7.3'
+    id 'maven-publish'
+    id 'java'
 }
 
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-
 group 'com.ganesshkumar'
-version '1.0-rc1'
+version '1.0.0-rc1'
 
 sourceCompatibility = 1.8
 
@@ -17,4 +17,65 @@ repositories {
 dependencies {
     testCompile group: "junit" , name: "junit", version: "4.12"
     testRuntime group: "org.slf4j", name: "slf4j-log4j12", version: "1.7.5"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+javadoc.failOnError = false
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "MIT"
+            url "https://github.com/ganesshkumar/afterburn-java-parser/blob/master/LICENSE"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "ganesshkumar"
+            name "Ganessh Kumar R P"
+            email "rpganesshkumar@gmail.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/ganesshkumar/afterburn-java-parser"
+    }
+}
+
+publishing {
+    publications {
+        BintrayPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar {
+                classifier "sources"
+            }
+//            artifact javadocJar {
+//                classifier "javadoc"
+//            }
+            groupId 'com.ganesshkumar'
+            artifactId 'afterburn-java-parser'
+            version '1.0.0-rc1'
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Java based afterburn parser for OpenFass')
+                root.appendNode('name', 'afterburn-java-parser')
+                root.appendNode('url', 'https://github.com/ganesshkumar/afterburn-java-parser')
+                root.children().last() + pomConfig
+            }
+        }
+    }
 }
