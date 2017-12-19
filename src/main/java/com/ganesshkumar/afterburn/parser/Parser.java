@@ -9,6 +9,13 @@ import java.io.IOException;
 public class Parser {
     private Handler handler = new Handler();
 
+    /**
+     * Reads the incoming request from the given stream, passes the request body to the function handler and
+     * writes the funtion's output into the given writer.
+     *
+     * @param inputStream stream from which the incoming request has to be read
+     * @param outputWriter writer into which the function's response has to be written
+     */
     public void acceptIncoming(DataInputStream inputStream, BufferedWriter outputWriter) throws IOException {
         System.err.println("Begin Request");
         // Read the incoming request from stdin

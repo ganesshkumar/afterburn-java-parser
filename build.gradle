@@ -63,9 +63,13 @@ publishing {
             artifact sourcesJar {
                 classifier "sources"
             }
-//            artifact javadocJar {
-//                classifier "javadoc"
-//            }
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+            artifact ('README.md') {
+                classifier = 'README'
+                extension  = 'md'
+            }
             groupId 'com.ganesshkumar'
             artifactId 'afterburn-java-parser'
             version '1.0.0-rc1'
@@ -78,4 +82,24 @@ publishing {
             }
         }
     }
+}
+
+bintray {
+    user = System.getProperty('bintray.user')
+    key = System.getProperty('bintray.key')
+    publications = ['BintrayPublication']
+
+    pkg {
+        repo = 'openfaas'
+        name = 'afterburn-java-parser'
+        userOrg = 'ganesshkumar'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/ganesshkumar/afterburn-java-parser.git'
+        version {
+            name = '1.0.0-rc1'
+            desc = '1.0.0-rc1'
+            released  = new Date()
+        }
+    }
+
 }
